@@ -137,7 +137,9 @@ export function Dashboard({ user }: { user: any }) {
     }
 
     setProcessing(false);
-    toast.success("All photos have been processed!");
+    toast.success("Enhancement Complete", {
+      description: `Successfully enhanced all ${photos.length} images.`,
+    });
   };
 
   const handleDownloadZip = async () => {
