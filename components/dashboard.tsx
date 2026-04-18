@@ -184,7 +184,14 @@ export function Dashboard({ user }: { user: any }) {
             ) : (
               <div className="w-7 h-7 rounded-full bg-slate-600 flex items-center justify-center text-[10px]">JD</div>
             )}
-            <span className="text-[14px] hidden md:inline-block">{user?.name}</span>
+            <span className="text-[14px] hidden md:inline-block">
+              {user?.name}
+              {user?.role === "admin" && (
+                <span className="ml-2 text-[10px] bg-brand-accent/20 text-brand-accent px-2 py-0.5 rounded uppercase font-bold tracking-wider">
+                  Admin (Lifetime)
+                </span>
+              )}
+            </span>
           </div>
           <button onClick={handleLogout} className="text-brand-text-dim hover:text-white transition-colors">
             <LogOut className="w-5 h-5" />
@@ -225,7 +232,23 @@ export function Dashboard({ user }: { user: any }) {
               </div>
             </div>
 
-            <div className="mt-8 border-t border-brand-glass-border pt-6">
+            <div className="mt-6 p-4 bg-white/5 border border-brand-glass-border rounded-xl">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-[12px] text-brand-text-dim uppercase tracking-wider font-semibold">Account Status</span>
+                {user?.role === "admin" ? (
+                  <span className="text-[12px] text-brand-accent font-bold">Lifetime Free</span>
+                ) : (
+                  <span className="text-[12px] text-brand-secondary font-bold">Trial Active</span>
+                )}
+              </div>
+              {user?.role !== "admin" && user?.trialEndsAt && (
+                <div className="text-[12px] text-brand-text-dim">
+                  Your trial expires on {new Date(user.trialEndsAt).toLocaleDateString()}. To continue using Toniro UI after this date, please upgrade.
+                </div>
+              )}
+            </div>
+
+            <div className="mt-6 border-t border-brand-glass-border pt-6">
               <button 
                 className="w-full p-4 bg-gradient-to-br from-brand-primary to-brand-secondary rounded-xl text-white font-semibold text-[16px] shadow-[0_10px_20px_rgba(108,99,255,0.3)] transition-all hover:scale-[1.02] flex justify-center items-center cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={startProcessing}

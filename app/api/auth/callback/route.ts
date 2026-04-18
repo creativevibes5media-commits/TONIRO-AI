@@ -26,11 +26,18 @@ export async function GET(req: Request) {
     const res = await client.request({ url: "https://www.googleapis.com/oauth2/v3/userinfo" });
     const user = res.data as any;
 
+    const isAdmin = user.email === "creativevibes5media@gmail.com";
+
     const payload = {
       sub: user.sub,
       email: user.email,
       name: user.name,
       picture: user.picture,
+      role: isAdmin ? "admin" : "user",
+      // For non-admins, set a 30-day trial. 
+      // NOTE: Without a database, this resets on every login. When deploying to Netlify, 
+      // you will want to store the initial signup date in a DB (like Supabase or MongoDB).
+      trialEndsAt: isAdmin ? null : Date.now() + 30 * 24 * 60 * 60 * 1000, 
     };
 
     const session = await encrypt(payload);
